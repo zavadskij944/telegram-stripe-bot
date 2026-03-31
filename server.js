@@ -38,6 +38,15 @@ bot.onText(/\/start/, (msg) => {
 bot.on("callback_query", async (query) => {
   const chatId = query.message.chat.id;
   const product = query.data;
+  let priceId;
+
+if (product === "work") {
+  priceId = "price_1TFvpQ3SUQ4FdZ7StCgWGgQR";
+} else if (product === "work_ukr_PESEL") {
+  priceId = "price_1TFvnI3SUQ4FdZ7SefJD7dwk";
+} else if (product === "study") {
+  priceId = "price_1TFvnI3SUQ4FdZ7SefJD7dwk";
+}
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ["card"],
