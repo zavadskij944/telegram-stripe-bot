@@ -73,6 +73,10 @@ try {
 }
 });
 
+bot.on('message', (msg) => {
+  console.log(msg);
+});
+
 app.listen(3000, () => {
   console.log("Server started");
 });
