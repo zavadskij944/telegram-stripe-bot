@@ -23,11 +23,12 @@ app.post(`/bot${TELEGRAM_TOKEN}`, (req, res) => {
 
 // старт
 bot.onText(/\/start/, (msg) => {
+  try {
   bot.sendMessage(msg.chat.id, "Выбери продукт:", {
     reply_markup: {
       inline_keyboard: [
         [{ text: "Работа", callback_data: "work" }],
-        [{ text: "Работа (UKR/PSL)", callback_data: "work_ukr" }],
+        [{ text: "Работа (UKR/PESEL)", callback_data: "work_ukr" }],
         [{ text: "Учёба", callback_data: "study" }]
       ]
     }
