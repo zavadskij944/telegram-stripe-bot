@@ -51,7 +51,6 @@ bot.on("callback_query", async (query) => {
   } else if (product === "study") {
     priceId = "price_1TFetW3SUQ4FdZ7SvWS6IZhg";
   }
-
 try {
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
@@ -73,3 +72,4 @@ try {
   await bot.sendMessage(chatId, 'Ошибка при создании оплаты');
 }
 });
+
