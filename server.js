@@ -1,16 +1,16 @@
 const express = require("express");
 const TelegramBot = require("node-telegram-bot-api");
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require('stripe')(process.env.STRIPE_SECRET);
 
 const app = express();
 app.use(express.json());
 
 // ENV переменные
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
-const STRIPE_SECRET = process.env.STRIPE_SECRET;
+
 
 const bot = new TelegramBot(TELEGRAM_TOKEN);
-const stripe = Stripe(STRIPE_SECRET);
+
 
 // запуск webhook Telegram
 bot.setWebHook(`${process.env.RENDER_EXTERNAL_URL}/bot${TELEGRAM_TOKEN}`);
