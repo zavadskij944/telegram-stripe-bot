@@ -71,4 +71,4 @@ try {
 } catch (error) {
   console.error(error);
   await bot.sendMessage(chatId, 'Ошибка при создании оплаты');
-}
+});
