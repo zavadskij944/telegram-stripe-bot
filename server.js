@@ -52,7 +52,7 @@ bot.on("callback_query", async (query) => {
     priceId = "price_1TFetW3SUQ4FdZ7SvWS6IZhg";
   }
 
- try {
+try {
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     line_items: [
@@ -60,7 +60,7 @@ bot.on("callback_query", async (query) => {
         price: priceId,
         quantity: 1
       }
-    ]
+    ],
     mode: 'payment',
     success_url: 'https://t.me/MY_LEGAZBOT',
     cancel_url: 'https://t.me/MY_LEGAZBOT'
