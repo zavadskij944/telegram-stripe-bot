@@ -27,6 +27,7 @@ bot.onText(/\/start/, (msg) => {
     reply_markup: {
       inline_keyboard: [
         [{ text: "Работа", callback_data: "work" }],
+        [{ text: "Работа (UKR/PSL)", callback_data: "work_ukr" }],
         [{ text: "Учёба", callback_data: "study" }]
       ]
     }
