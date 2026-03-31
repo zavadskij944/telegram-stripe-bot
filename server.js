@@ -23,7 +23,7 @@ app.post(`/bot${TELEGRAM_TOKEN}`, (req, res) => {
 
 // старт
 bot.onText(/\/start/, (msg) => {
-  try {
+
   bot.sendMessage(msg.chat.id, "Выбери продукт:", {
     reply_markup: {
       inline_keyboard: [
