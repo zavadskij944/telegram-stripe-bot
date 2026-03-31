@@ -37,22 +37,22 @@ bot.onText(/\/start/, (msg) => {
 
 // обработка кнопок
 bot.on("callback_query", async (query) => {
+  bot.answerCallbackQuery(query.id);
+
+  const chatId = query.message.chat.id;
+  const product = query.data;
+
+  let priceId;
+
+  if (product === "work") {
+    priceId = "price_1TFvpQ3SUQ4FdZ7StCgWGgQR";
+  } else if (product === "work_ukr") {
+    priceId = "price_1TFvnI3SUQ4FdZ7SefJD7dwk";
+  } else if (product === "study") {
+    priceId = "price_1TFetW3SUQ4FdZ7SvWS6IZhg";
+  }
+
   try {
-    bot.answerCallbackQuery(query.id);
-
-    const chatId = query.message.chat.id;
-    const product = query.data;
-
-    let priceId;
-
-    if (product === "work") {
-      priceId = "price_1TFvpQ3SUQ4FdZ7StCgWGgQR";
-    } else if (product === "work_ukr_PESEL") {
-      priceId = "price_1TFvnI3SUQ4FdZ7SefJD7dwk";
-    } else if (product === "study") {
-      priceId = "price_1TFetW3SUQ4FdZ7SvWS6IZhg";
-    }
-
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       line_items: [
@@ -73,6 +73,10 @@ bot.on("callback_query", async (query) => {
     bot.sendMessage(chatId, `Оплати тут: ${session.url}`);
 
   } catch (error) {
+    console.log("ERROR:", error);
+    bot.sendMessage(chatId, "Ошибка при создании оплаты");
+  }
+});
     console.log("ERROR:", error);
   }
 });
