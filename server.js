@@ -1,36 +1,61 @@
-import express from "express";
-import fetch from "node-fetch";
+const express = require("express");
+const TelegramBot = require("node-telegram-bot-api");
+const Stripe = require("stripe");
 
 const app = express();
 app.use(express.json());
 
-app.post("/webhook", async (req, res) => {
-  const event = req.body;
+// ENV переменные
+const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
+const STRIPE_SECRET = process.env.STRIPE_SECRET;
 
-  if (event.type === "checkout.session.completed") {
-    const session = event.data.object;
+const bot = new TelegramBot(TELEGRAM_TOKEN);
+const stripe = Stripe(STRIPE_SECRET);
 
-    const telegramId = session.metadata.telegram_id;
+// запуск webhook Telegram
+bot.setWebHook(`${process.env.RENDER_EXTERNAL_URL}/bot${TELEGRAM_TOKEN}`);
 
-    const BOT_TOKEN = "ВСТАВЬ_СЮДА_ТОКЕН_БОТА";
-
-    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        chat_id: telegramId,
-        text: "✅ Оплата прошла! Напиши сюда 'ДОСТУП', чтобы получить канал",
-      }),
-    });
-  }
-
+// обработка сообщений
+app.post(`/bot${TELEGRAM_TOKEN}`, (req, res) => {
+  bot.processUpdate(req.body);
   res.sendStatus(200);
 });
 
-app.get("/", (req, res) => {
-  res.send("Server works!");
+// старт
+bot.onText(/\/start/, (msg) => {
+  bot.sendMessage(msg.chat.id, "Выбери продукт:", {
+    reply_markup: {
+      inline_keyboard: [
+        [{ text: "Работа", callback_data: "work" }],
+        [{ text: "Учёба", callback_data: "study" }]
+      ]
+    }
+  });
 });
 
-app.listen(10000, () => console.log("Server started"));
+// обработка кнопок
+bot.on("callback_query", async (query) => {
+  const chatId = query.message.chat.id;
+  const product = query.data;
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    line_items: [
+      {
+        price: "price_1TFvpQ3SUQ4FdZ7StCgWGgQR",
+        quantity: 1
+      }
+    ],
+    mode: "payment",
+    success_url: "https://t.me/MY_LEGAZBOT",
+    cancel_url: "https://t.me/MY_LEGAZBOT",
+    metadata: {
+      telegram_id: chatId,
+      product: product
+    }
+  });
+
+  bot.sendMessage(chatId, `Оплати тут: ${session.url}`);
+});
+
+app.listen(3000, () => console.log("Server started"));
