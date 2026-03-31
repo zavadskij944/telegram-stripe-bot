@@ -52,29 +52,23 @@ bot.on("callback_query", async (query) => {
     priceId = "price_1TFetW3SUQ4FdZ7SvWS6IZhg";
   }
 
-  try {
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1
-        }
-      ],
-      mode: "payment",
-      success_url: "https://t.me/MY_LEGAZBOT",
-      cancel_url: "https://t.me/MY_LEGAZBOT",
-      metadata: {
-        telegram_id: chatId,
-        product: product
+ try {
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price: priceId,
+        quantity: 1
       }
-    });
+    ]
+    mode: 'payment',
+    success_url: 'https://t.me/MY_LEGAZBOT',
+    cancel_url: 'https://t.me/MY_LEGAZBOT'
+  });
 
-    bot.sendMessage(chatId, `Оплати тут: ${session.url}`);
+  await bot.sendMessage(chatId, `Оплати тут: ${session.url}`);
 
-  } catch (error) {
-    console.log("ERROR:", error);
-    bot.sendMessage(chatId, "Ошибка при создании оплаты");
-  }
-
-    
+} catch (error) {
+  console.error(error);
+  await bot.sendMessage(chatId, 'Ошибка при создании оплаты');
+}
