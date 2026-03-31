@@ -76,7 +76,5 @@ bot.on("callback_query", async (query) => {
     console.log("ERROR:", error);
     bot.sendMessage(chatId, "Ошибка при создании оплаты");
   }
-});
-    console.log("ERROR:", error);
-  }
-});
+
+    
