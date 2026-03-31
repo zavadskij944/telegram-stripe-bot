@@ -1,6 +1,6 @@
 const express = require("express");
 const TelegramBot = require("node-telegram-bot-api");
-const Stripe = require("stripe");
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 app.use(express.json());
