@@ -37,37 +37,42 @@ bot.onText(/\/start/, (msg) => {
 
 // обработка кнопок
 bot.on("callback_query", async (query) => {
-  bot.answerCallbackQuery(query.id);
-  const chatId = query.message.chat.id;
-  const product = query.data;
-  let priceId;
+  try {
+    bot.answerCallbackQuery(query.id);
 
-if (product === "work") {
-  priceId = "price_1TFvpQ3SUQ4FdZ7StCgWGgQR";
-} else if (product === "work_ukr_PESEL") {
-  priceId = "price_1TFvnI3SUQ4FdZ7SefJD7dwk";
-} else if (product === "study") {
-  priceId = "price_1TFvnI3SUQ4FdZ7SefJD7dwk";
-}
+    const chatId = query.message.chat.id;
+    const product = query.data;
 
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card"],
-    line_items: [
-      {
-        price: "price_1TFvpQ3SUQ4FdZ7StCgWGgQR",
-        quantity: 1
-      }
-    ],
-    mode: "payment",
-    success_url: "https://t.me/MY_LEGAZBOT",
-    cancel_url: "https://t.me/MY_LEGAZBOT",
-    metadata: {
-      telegram_id: chatId,
-      product: product
+    let priceId;
+
+    if (product === "work") {
+      priceId = "price_1TFvpQ3SUQ4FdZ7StCgWGgQR";
+    } else if (product === "work_ukr_PESEL") {
+      priceId = "price_1TFvnI3SUQ4FdZ7SefJD7dwk";
+    } else if (product === "study") {
+      priceId = "price_1TFetW3SUQ4FdZ7SvWS6IZhg";
     }
-  });
 
-  bot.sendMessage(chatId, `Оплати тут: ${session.url}`);
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1
+        }
+      ],
+      mode: "payment",
+      success_url: "https://t.me/MY_LEGAZBOT",
+      cancel_url: "https://t.me/MY_LEGAZBOT",
+      metadata: {
+        telegram_id: chatId,
+        product: product
+      }
+    });
+
+    bot.sendMessage(chatId, `Оплати тут: ${session.url}`);
+
+  } catch (error) {
+    console.log("ERROR:", error);
+  }
 });
-
-app.listen(3000, () => console.log("Server started"));
