@@ -36,6 +36,7 @@ bot.onText(/\/start/, (msg) => {
 
 // обработка кнопок
 bot.on("callback_query", async (query) => {
+  bot.answerCallbackQuery(query.id);
   const chatId = query.message.chat.id;
   const product = query.data;
   let priceId;
