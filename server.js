@@ -7,7 +7,9 @@ app.use(express.json());
 
 // ENV переменные
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
-
+const CHANNEL_WORK = "-1003739662020";
+const CHANNEL_WORK_UKR = "-1003794594810";
+const CHANNEL_STUDY = "-1003887230146";
 
 const bot = new TelegramBot(TELEGRAM_TOKEN);
 
@@ -53,17 +55,22 @@ bot.on("callback_query", async (query) => {
   }
 try {
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ['card'],
-    line_items: [
-      {
-        price: priceId,
-        quantity: 1
-      }
-    ],
-    mode: 'payment',
-    success_url: 'https://t.me/MY_LEGAZBOT',
-    cancel_url: 'https://t.me/MY_LEGAZBOT'
-  });
+  payment_method_types: ['card'],
+  line_items: [
+    {
+      price: priceId,
+      quantity: 1
+    }
+  ],
+  mode: 'payment',
+  success_url: 'https://t.me/MY_LEGAZBOT',
+  cancel_url: 'https://t.me/MY_LEGAZBOT',
+
+  metadata: {
+    chatId: chatId,
+    product: product
+  }
+});
 
   await bot.sendMessage(chatId, `Оплати тут: ${session.url}`);
 
@@ -73,10 +80,43 @@ try {
 }
 });
 
-bot.on('message', (msg) => {
-  console.log(msg);
-});
+app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  const event = JSON.parse(req.body.toString());
 
+if (event.type === 'checkout.session.completed') {
+  const session = event.data.object;
+
+  const chatId = session.metadata.chatId;
+  const product = session.metadata.product;
+
+  let channelId;
+
+  if (product === 'work') {
+    channelId = CHANNEL_WORK;
+  } else if (product === 'work_ukr') {
+    channelId = CHANNEL_WORK_UKR;
+  } else if (product === 'study') {
+    channelId = CHANNEL_STUDY;
+  }
+
+  try {
+    const invite = await bot.createChatInviteLink(channelId, {
+      member_limit: 1,
+      expire_date: Math.floor(Date.now() / 1000) + 3600
+    });
+
+    await bot.sendMessage(
+  chatId,
+  `✅ Оплата прошла!\nВот доступ в канал:\n${invite.invite_link}`
+);
+    
+  } catch (err) {
+    console.error(err);
+  }
+
+  res.sendStatus(200);
+}
+});
 app.listen(3000, () => {
   console.log("Server started");
 });
