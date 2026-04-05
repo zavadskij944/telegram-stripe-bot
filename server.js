@@ -85,7 +85,9 @@ app.post(`/bot${TELEGRAM_TOKEN}`, (req, res) => {
   });
 
 });
-
+bot.on("message", (msg) => {
+  console.log("CHAT ID:", msg.chat.id);
+});
  
 
 // обработка кнопок
