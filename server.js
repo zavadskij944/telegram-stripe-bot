@@ -182,7 +182,7 @@ bot.on("callback_query", async (query) => {
       }
     });
 
-    await bot.sendMessage(chatId, `💳 Оплата доступа:\n\n${session.url}await bot.sendMessage(chatId, `💳 Оплата доступа:
+    await bot.sendMessage(chatId, `📄 Оплата доступа:
 
 ${session.url}
 
