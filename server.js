@@ -75,15 +75,12 @@ app.post(`/bot${TELEGRAM_TOKEN}`, (req, res) => {
 
   bot.sendMessage(msg.chat.id, text, {
     reply_markup: {
-      inline_keyboard: [
-        [
-          { text: "💼 Работа", callback_data: "work" },
-          { text: "📄 UKR/PSL", callback_data: "work_ukr" }
-        ],
-        [
-          { text: "🎓 Учёба", callback_data: "study" }
-        ]
-      ]
+     inline_keyboard: [
+  [
+    { text: "🏙 Познань", callback_data: "city_poznan" },
+    { text: "🏙 Вроцлав", callback_data: "city_wroclaw" }
+  ]
+]
     }
   });
 
