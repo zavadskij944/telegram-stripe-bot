@@ -170,16 +170,14 @@ bot.on("callback_query", async (query) => {
     const session = await stripe.checkout.sessions.create({
   mode: 'payment',
 
+  payment_method_types: ['card', 'blik'],
+
   line_items: [
     {
       price: priceId,
       quantity: 1,
     },
   ],
-
-  automatic_payment_methods: {
-    enabled: true,
-  },
 
   success_url: 'https://t.me/YOUR_BOT',
   cancel_url: 'https://t.me/YOUR_BOT',
