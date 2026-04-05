@@ -168,14 +168,14 @@ bot.on("callback_query", async (query) => {
 
   try {
     const session = await stripe.checkout.sessions.create({
+  mode: 'payment',
+
   line_items: [
     {
       price: priceId,
       quantity: 1,
     },
   ],
-
-  mode: 'payment',
 
   automatic_payment_methods: {
     enabled: true,
