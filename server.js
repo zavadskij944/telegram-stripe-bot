@@ -215,13 +215,20 @@ if (event.type === 'checkout.session.completed') {
 
   let channelId;
 
-  if (product === 'work') {
-    channelId = CHANNEL_WORK;
-  } else if (product === 'work_ukr') {
-    channelId = CHANNEL_WORK_UKR;
-  } else if (product === 'study') {
-    channelId = CHANNEL_STUDY;
-  }
+ // ===== ПОЗНАНЬ =====
+if (product === 'poznan_work') {
+  channelId = -1003739662020;
+} else if (product === 'poznan_work_ukr') {
+  channelId = -1003794594810;
+} else if (product === 'poznan_study') {
+  channelId = -1003887230146;
+
+// ===== ВРОЦЛАВ =====
+} else if (product === 'wroclaw_work') {
+  channelId = -1003766614983;
+} else if (product === 'wroclaw_study') {
+  channelId = -1003611977453;
+}
   try {
     const invite = await bot.createChatInviteLink(channelId, {
       member_limit: 1,
