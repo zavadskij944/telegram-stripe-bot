@@ -168,21 +168,27 @@ bot.on("callback_query", async (query) => {
 
   try {
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      line_items: [
-        {
-          price: priceId,
-          quantity: 1
-        }
-      ],
-      mode: 'payment',
-      success_url: 'https://t.me/YOUR_BOT',
-      cancel_url: 'https://t.me/YOUR_BOT',
-      metadata: {
-        chatId: chatId,
-        product: product
-      }
-    });
+  line_items: [
+    {
+      price: priceId,
+      quantity: 1,
+    },
+  ],
+
+  mode: 'payment',
+
+  automatic_payment_methods: {
+    enabled: true,
+  },
+
+  success_url: 'https://t.me/YOUR_BOT',
+  cancel_url: 'https://t.me/YOUR_BOT',
+
+  metadata: {
+    chatId: chatId,
+    product: product,
+  },
+});
 
     await bot.sendMessage(chatId, `📄 Оплата доступа:
 
