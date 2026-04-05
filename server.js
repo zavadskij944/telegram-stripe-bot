@@ -93,107 +93,100 @@ bot.on("callback_query", async (query) => {
   bot.answerCallbackQuery(query.id);
 
   const chatId = query.message.chat.id;
-const chatId = query.message.chat.id;
-const data = query.data;
+  const data = query.data;
 
-// ГОРОДА
-if (data === "city_poznan") {
-  return bot.sendMessage(chatId, "📍 Познань\n👇 Выберите вариант:", {
-    reply_markup: {
-      inline_keyboard: [
-        [
-          { text: "💼 Работа", callback_data: "poznan_work" },
-          { text: "📄 PESEL UKR", callback_data: "poznan_work_ukr" }
-        ],
-        [
-          { text: "🎓 Учёба", callback_data: "poznan_study" }
+  // =====================
+  // ВЫБОР ГОРОДА
+  // =====================
+
+  if (data === "city_poznan") {
+    return bot.sendMessage(chatId, "📍 Познань\n👇 Выберите вариант:", {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            { text: "💼 Работа", callback_data: "poznan_work" },
+            { text: "📄 PESEL UKR", callback_data: "poznan_work_ukr" }
+          ],
+          [
+            { text: "🎓 Учёба", callback_data: "poznan_study" }
+          ]
         ]
-      ]
-    }
-  });
-}
-
-if (data === "city_wroclaw") {
-  return bot.sendMessage(chatId, "📍 Вроцлав\n👇 Выберите вариант:", {
-    reply_markup: {
-      inline_keyboard: [
-        [
-          { text: "💼 Работа", callback_data: "wroclaw_work" }
-        ],
-        [
-          { text: "🎓 Учёба", callback_data: "wroclaw_study" }
-        ]
-      ]
-    }
-  });
-}
-
-// PRICE
-let priceId;
-let product;
-
-// ПОЗНАНЬ
-if (data === "poznan_work") {
-  priceId = "price_1TFvpQ3SUQ4FdZ7StCgWGgQR";
-  product = "poznan_work";
-} else if (data === "poznan_work_ukr") {
-  priceId = "price_1TFvnI3SUQ4FdZ7SefJD7dwk";
-  product = "poznan_work_ukr";
-} else if (data === "poznan_study") {
-  priceId = "price_1TFetW3SUQ4FdZ7SvWS6IZhg";
-  product = "poznan_study";
-}
-
-// ВРОЦЛАВ
-else if (data === "wroclaw_work") {
-  priceId = "price_1TIwHS3SUQ4FdZ7Szo5OvMQ4";
-  product = "wroclaw_work";
-} else if (data === "wroclaw_study") {
-  priceId = "price_1TIwJw3SUQ4FdZ7SIWMVxQkC";
-  product = "wroclaw_study";
-}
-
-if (!priceId) return;
-  
-try {
-  const session = await stripe.checkout.sessions.create({
-  payment_method_types: ['card'],
-  line_items: [
-    {
-      price: priceId,
-      quantity: 1
-    }
-  ],
-  mode: 'payment',
-  success_url: 'https://t.me/MY_LEGAZBOT',
-  cancel_url: 'https://t.me/MY_LEGAZBOT',
-
-  metadata: {
-    chatId: chatId,
-    product: product
+      }
+    });
   }
-});
 
- await bot.sendMessage(chatId, `
-📁 Оплата доступа:
+  if (data === "city_wroclaw") {
+    return bot.sendMessage(chatId, "📍 Вроцлав\n👇 Выберите вариант:", {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            { text: "💼 Работа", callback_data: "wroclaw_work" }
+          ],
+          [
+            { text: "🎓 Учёба", callback_data: "wroclaw_study" }
+          ]
+        ]
+      }
+    });
+  }
 
-${session.url}
+  // =====================
+  // PRICE ID
+  // =====================
 
-После оплаты вы получите автоматический доступ в закрытый Telegram-канал, где будет:
+  let priceId;
+  let product;
 
-📌 Пошаговая видео-инструкция по заполнению Wnioska  
-📄 Готовый образец заполнения заявления  
-📑 Полный чек-лист документов для подачи на временное жительство (карта побыта)  
-✅ Актуальные требования и разбор без лишней информации  
+  // ПОЗНАНЬ
+  if (data === "poznan_work") {
+    priceId = "price_1TFvpQ3SUQ4FdZ7StCgWGgQR";
+    product = "poznan_work";
+  } else if (data === "poznan_work_ukr") {
+    priceId = "price_1TFvnI3SUQ4FdZ7SefJD7dwk";
+    product = "poznan_work_ukr";
+  } else if (data === "poznan_study") {
+    priceId = "price_1TFetW3SUQ4FdZ7SvWS6IZhg";
+    product = "poznan_study";
+  }
 
-🔐 Доступ выдается автоматически сразу после оплаты.
+  // ВРОЦЛАВ
+  else if (data === "wroclaw_work") {
+    priceId = "price_1TIwHS3SUQ4FdZ7Szo5OvMQ4";
+    product = "wroclaw_work";
+  } else if (data === "wroclaw_study") {
+    priceId = "price_1TIwJw3SUQ4FdZ7SIWMVxQkC";
+    product = "wroclaw_study";
+  }
 
-Нажимая на ссылку, вы переходите к оплате, после которой бот отправит вам доступ в канал.
-`);
-} catch (error) {
-  console.error(error);
-  await bot.sendMessage(chatId, 'Ошибка при создании оплаты');
-}
+  if (!priceId) return;
+
+  // =====================
+  // STRIPE ОПЛАТА
+  // =====================
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1
+        }
+      ],
+      mode: 'payment',
+      success_url: 'https://t.me/YOUR_BOT',
+      cancel_url: 'https://t.me/YOUR_BOT',
+      metadata: {
+        chatId: chatId,
+        product: product
+      }
+    });
+
+    await bot.sendMessage(chatId, `💳 Оплата доступа:\n\n${session.url}`);
+  } catch (error) {
+    console.error(error);
+    await bot.sendMessage(chatId, "❌ Ошибка при создании оплаты");
+  }
 });
 
 app.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
