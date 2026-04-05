@@ -220,6 +220,11 @@ if (event.type === 'checkout.session.completed') {
   } else if (product === 'study') {
     channelId = CHANNEL_STUDY;
   }
+else if (product === 'wroclaw_work') {
+  channelId = -; // канал работа Вроцлав
+} else if (product === 'wroclaw_study') {
+  channelId = -100YYYYYYYYY; // канал учеба Вроцлав
+}
 
   try {
     const invite = await bot.createChatInviteLink(channelId, {
