@@ -221,7 +221,7 @@ if (event.type === 'checkout.session.completed') {
     channelId = CHANNEL_STUDY;
   }
 else if (product === 'wroclaw_work') {
-  channelId = -; // канал работа Вроцлав
+  channelId = -100YYYYYYYYY; // канал работа Вроцлав
 } else if (product === 'wroclaw_study') {
   channelId = -100YYYYYYYYY; // канал учеба Вроцлав
 }
