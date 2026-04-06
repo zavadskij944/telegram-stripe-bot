@@ -24,7 +24,13 @@ app.post(`/bot${TELEGRAM_TOKEN}`, (req, res) => {
 });
 // старт 
 
- bot.onText(/\/start/, (msg) => {
+ bot.onText(/\/start(.*)/, (msg, match) => {
+   const chatId = msg.chat.id;
+const source = match[1];
+
+if (source === "fb") {
+    bot.sendMessage(chatId, "📲 Вы пришли с Facebook");
+}
 
  const text = `👋 Добро пожаловать!
 
