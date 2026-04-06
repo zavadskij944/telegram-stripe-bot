@@ -29,6 +29,7 @@ app.post(`/bot${TELEGRAM_TOKEN}`, (req, res) => {
 const source = match[1] ? match[1].trim() : "";
 
 if (source === "fb") {
+  console.log("NEW FB USER:", chatId);
     bot.sendMessage(chatId, "📲 Вы пришли с Facebook");
 }
 
