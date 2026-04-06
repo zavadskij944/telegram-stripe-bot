@@ -131,6 +131,10 @@ bot.on("callback_query", async (query) => {
       }
     });
   }
+}
+
+if (data === "wroclaw_work") data = "poznan_work";
+if (data === "wroclaw_study") data = "poznan_study";
 
   // =====================
   // PRICE ID
