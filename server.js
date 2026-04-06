@@ -22,7 +22,6 @@ app.post(`/bot${TELEGRAM_TOKEN}`, (req, res) => {
   bot.processUpdate(req.body);
   res.sendStatus(200);
 });
-
 // старт 
 
  bot.onText(/\/start/, (msg) => {
