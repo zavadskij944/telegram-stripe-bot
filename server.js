@@ -94,7 +94,10 @@ bot.on("callback_query", async (query) => {
   bot.answerCallbackQuery(query.id);
 
   const chatId = query.message.chat.id;
-  const data = query.data;
+  let data = query.data;
+  
+  if (data === "wroclaw_work") data = "poznan_work";
+if (data === "wroclaw_study") data = "poznan_study";
 
   // =====================
   // ВЫБОР ГОРОДА
