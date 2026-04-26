@@ -1,9 +1,12 @@
-
 const TelegramBot = require("node-telegram-bot-api");
 
-// ENV переменные
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
+
 const CHANNEL_FREE = "https://t.me/wroclaw_praca";
+
+const bot = new TelegramBot(TELEGRAM_TOKEN, {
+  polling: true
+});
 
 // СТАРТ
 bot.onText(/\/start/, (msg) => {
