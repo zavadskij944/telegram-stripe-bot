@@ -48,16 +48,17 @@ bot.on("callback_query", (query) => {
   }
 
   // переход в канал
-  if (data === "wroclaw_work" || data === "wroclaw_study") {
-    return bot.sendMessage(chatId,
+if (data === "wroclaw_work" || data === "wroclaw_study") {
+  return bot.sendMessage(chatId,
 `📌 Вы получите:
 
 — список документов  
 — реальные примеры  
 — частые ошибки  
 — часть видео  
+
 👉 Перейдите в канал:
 ${CHANNEL_FREE}`
-);
-  }
-
+  );
+}
+});
