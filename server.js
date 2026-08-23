@@ -2,7 +2,7 @@ const TelegramBot = require("node-telegram-bot-api");
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
 
-const CHANNEL_FREE = "https://t.me/wroclaw_praca";
+const CHANNEL_FREE = "https://t.me/+6XR0EeD-7JgzOTE6";
 
 const bot = new TelegramBot(TELEGRAM_TOKEN, {
   polling: true
