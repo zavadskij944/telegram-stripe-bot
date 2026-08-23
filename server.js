@@ -19,7 +19,7 @@ bot.onText(/\/start/, (msg) => {
     {
       reply_markup: {
         inline_keyboard: [
-          [{ text: "📍 Wrocław", callback_data: "city_wroclaw" }]
+          [{ text: "📍 Poznań", callback_data: "city_poznan" }]
         ]
       }
     }
@@ -34,7 +34,7 @@ bot.on("callback_query", (query) => {
   bot.answerCallbackQuery(query.id);
 
   // выбор города
-  if (data === "city_wroclaw") {
+  if if (data === "city_poznan") {
     return bot.sendMessage(chatId,
 `📍 Wrocław
 
@@ -42,8 +42,8 @@ bot.on("callback_query", (query) => {
       {
         reply_markup: {
           inline_keyboard: [
-            [{ text: "💼 Работа", callback_data: "wroclaw_work" }],
-            [{ text: "🎓 Учёба", callback_data: "wroclaw_study" }]
+            [{ text: "💼 Работа", callback_data: "poznan_work" }],
+
           ]
         }
       }
